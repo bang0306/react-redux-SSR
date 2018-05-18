@@ -16,7 +16,16 @@ app.use('/api', proxy('http://react-ssr-api.herokuapp.com', {
 app.use(express.static('public'));
 app.get('*', (req, res) => {
     const store = createStore(req);
-    const promises = matchRoutes(Routes, req.path).map(({route}) => typeof route.loadData === 'function' ? route.loadData(store) : null);
+    const promises = matchRoutes(Routes, req.path)
+                    .map(({route}) => typeof route.loadData === 'function' ? route.loadData(store) : null)
+                    .map((promise) => {
+                        if (promise) {
+                            return new Promise((resolve, reject) => {
+                                promise.then(resolve).catch(resolve);
+                            })
+                        }
+                    });
+
     Promise.all(promises).then(() => {
         const context = {};
         const html = renderer(req, store, context);
