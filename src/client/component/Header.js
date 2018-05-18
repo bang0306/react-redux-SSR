@@ -14,6 +14,7 @@ const Header =  ({ auth }) => {
     return (
         <div>
             <Link to="/">React SSR</Link>
+            <Link to="/users">Users</Link>
             <Link to="/admins">Admins</Link>
             { authBtn }
         </div>
