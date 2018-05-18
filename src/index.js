@@ -18,7 +18,11 @@ app.get('*', (req, res) => {
     const store = createStore(req);
     const promises = matchRoutes(Routes, req.path).map(({route}) => typeof route.loadData === 'function' ? route.loadData(store) : null);
     Promise.all(promises).then(() => {
-        const html = renderer(req, store);
+        const context = {};
+        const html = renderer(req, store, context);
+        if (context.notFound) {
+            res.status(404);
+        }
         res.send(html);
     })
 })
