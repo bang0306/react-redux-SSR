@@ -29,9 +29,9 @@ app.get('*', (req, res) => {
     Promise.all(promises).then(() => {
         const context = {};
         const html = renderer(req, store, context);
-        console.log('context', context);
+        // console.log('context', context);
         if (context.url) {
-            console.log('redirect', context.url)
+            // console.log('redirect', context.url)
             return res.redirect(301, context.url);
         }
         if (context.notFound) {
